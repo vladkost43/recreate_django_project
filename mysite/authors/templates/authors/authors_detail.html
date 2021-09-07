@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <h2 class="article-title">{{ object.first_name }} {{ object.last_name }}</h2>
+      <p class="article-content">{{ object.biography }}</p>
+      <p> Books:
+{% for author in object.books_set.all %}
+   " {{ author.book_name }} "
+ {% endfor %}
+</p>
+    </div>
+  </article>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "blog/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        {% for auth in object.authors.all %}
+        {% if auth.first_name == user.first_name and auth.last_name == user.last_name %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.pk %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.pk %}">Delete</a>
+          </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <h2 class="article-title">{{ object.book_name }}</h2>
+      <p class="article-content">{{ object.description }}</p>
+      <p> Authors:
+      {% for author in object.authors.all %}
+         " {{ author.first_name }} {{ author.last_name }} "
+      {% endfor %}
+
+</p>
+         {% if request.user.groups.all.0.name == 'Users' %}
+         <small class="text-muted">
+           <p align="right"> <a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'review-create' object.pk %} ">Add review</a></p>
+        </small>
+{% endif %}
+    </div>
+  </article>
+
+       {% for review in object.review_set.all %}
+ <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+    <h3>Review</h3>
+        {% if review.user == user  %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'review-update' review.pk %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'review-delete' review.pk %}">Delete</a>
+          </div>
+        {% endif %}
+
+      </div>
+      <h4 class="article-title">{{ review.user }}</h4>
+      <p class="article-content">{{ review.text }}</p>
+        {% if request.user.groups.all.0.name == 'Users' %}
+        <p align="right"> <a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'comments-create' review.pk %} ">Add comment</a></p>
+        {% endif %}
+        <hr>
+        <h4>Comments</h4>
+        {% for comment in review.comments_set.all %}
+        <hr>
+ <article class="media content-sections">
+    <div class="media-body">
+      <div class="article-metadata">
+        {% if comment.user == user  %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'comments-update' comment.pk %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'comments-delete' comment.pk %}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+      <h4 class="article-title">{{ comment.user }}</h4>
+      <p class="article-content">{{ comment.text }}</p>
+
+
+    </div>
+  </article>
+
+ {% endfor %}
+
+    </div>
+  </article>
+ {% endfor %}
+
+
+{% endblock content %}

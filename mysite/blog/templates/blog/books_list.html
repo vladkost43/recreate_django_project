@@ -1,0 +1,41 @@
+{% extends "blog/base.html" %}
+{% block content %}
+ <div class="media-body">
+            <h3>Search Books</h3>
+     <form action="{% url 'books-search' %}" metod="get">
+         <input type="search" placeholder="Write search author..." name="q" class="form-control">
+         <button type="submit">
+             <span ></span>
+         </button>
+<hr>
+     </form>
+          </div>
+    {% for post in posts %}
+          <div class="media-body">
+            <h2><a class="article-title" href="{% url 'post-detail' post.pk %}">{{ post.book_name }}</a></h2>
+            <p class="article-content">{{ post.description|linebreaks|truncatewords:20 }}</p>
+          </div>
+<hr>
+    {% endfor %}
+    {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-danger mb-4" href="?{{ q }}page=1">First</a>
+        <a class="btn btn-outline-danger mb-4" href="?{{ q }}page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-outline-danger mb-4" href="?{{ q }}page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-danger mb-4" href="?{{ q }}page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-danger mb-4" href="?{{ q }}page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-danger mb-4" href="?{{ q }}page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %}
+{% endblock content %}
