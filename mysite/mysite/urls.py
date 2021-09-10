@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
     url(r'^logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
     url(r'^profile/', profile, name='profile'),
+    url(r'^app/', include('app.urls')),
 ]
